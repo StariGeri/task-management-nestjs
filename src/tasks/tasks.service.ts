@@ -8,7 +8,7 @@ import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TasksService {
-  constructor(private tasksRepository: TasksRepository) {}
+  constructor(private readonly tasksRepository: TasksRepository) {}
 
   getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     return this.tasksRepository.getTasks(filterDto, user);
@@ -28,15 +28,19 @@ export class TasksService {
     return this.tasksRepository.createTask(createTaskDto, user);
   }
 
-  /*   async updateTask(id: string, status: TaskStatus): Promise<Task> {
-    const task = await this.getTaskById(id);
+  async updateTaskStatus(
+    id: string,
+    status: TaskStatus,
+    user: User,
+  ): Promise<Task> {
+    const task = await this.getTaskById(id, user);
 
     task.status = status;
 
     await this.tasksRepository.save(task);
 
     return task;
-  } */
+  }
 
   async deleteTask(id: string): Promise<void> {
     const result = await this.tasksRepository.delete(id);
